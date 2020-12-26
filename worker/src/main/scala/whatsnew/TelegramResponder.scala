@@ -8,6 +8,7 @@ import cats.implicits._
 import com.bot4s.telegram.methods.SendMessage
 import Entities._
 import com.bot4s.telegram.models.ChatId
+import com.bot4s.telegram.cats.Polling
 
 class TelegramResponder[F[_]: Async: ContextShift](token: String)
     extends TelegramBot(token = token, backend = AsyncHttpClientCatsBackend())

@@ -6,6 +6,7 @@ import pureconfig.generic.auto._
 import pureconfig.module.catseffect.syntax._
 import com.softwaremill.sttp.asynchttpclient.cats.AsyncHttpClientCatsBackend
 import io.chrisdavenport.log4cats.slf4j.Slf4jLogger
+import org.asynchttpclient.DefaultAsyncHttpClient
 
 object WorkerProgram extends IOApp {
 
@@ -28,7 +29,8 @@ object WorkerProgram extends IOApp {
         config.job.requestInterval
       )
       _ <- workerJob.runJob()
-      _ = responder.shutdown()
+      _ <- Sync[IO].delay(responder.shutdown())
+      _ <- Sync[IO].delay(backend.close())
     } yield ExitCode.Success
 
 }

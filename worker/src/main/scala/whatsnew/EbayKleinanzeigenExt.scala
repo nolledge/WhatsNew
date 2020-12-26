@@ -39,7 +39,7 @@ class EbayKleinanzeigenExt[F[_]: Logger](backend: SttpBackend[F, Nothing])(
     val browser = JsoupBrowser()
     val doc = browser.parseString(s)
     (for {
-      article <- doc >> elements("article")
+      article <- doc >> elements("#srchrslt-adtable article")
       id <- article >?> attr("data-adid")
       main <- article >?> element(".aditem-main")
       rel <- main >> element("a") >?> attr("href")
