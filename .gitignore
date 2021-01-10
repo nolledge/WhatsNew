@@ -4,3 +4,4 @@
 .bsp/
 .vscode/
 target/
+worker_job.yaml

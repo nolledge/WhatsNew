@@ -9,7 +9,7 @@ spec:
       creationTimestamp: null
       name: whats-new-worker
     spec:
-      activeDeadlineSeconds: 300
+      activeDeadlineSeconds: 120
       template:
         metadata:
           creationTimestamp: null
@@ -17,7 +17,7 @@ spec:
             app: whats-new-worker
         spec:
           containers:
-          - image: core.harbor.storozhev.net/nolledge/whats-new-worker:0.1.6-SNAPSHOT
+          - image: core.harbor.storozhev.net/nolledge/whats-new-worker:0.2.0-SNAPSHOT
             env:
                - name: BOT_TOKEN
                  value: 833594755:AAGVgjkTntAZMytmZvKBnSFmo31Jx3GgpLM 
@@ -28,5 +28,5 @@ spec:
             name: whatsnew-worker
             resources: {}
           restartPolicy: Never
-  schedule: '*/15 * * * *'
+  schedule: '*/5 * * * *'
 status: {}
