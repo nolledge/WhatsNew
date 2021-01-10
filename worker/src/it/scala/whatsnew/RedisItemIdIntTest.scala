@@ -54,7 +54,6 @@ class RedisItemIdIntTest
   "The RedisItemIdInt" should "return empty when nothing set" in {
     (for {
       res <- redisItemIds.get(chatId, searchUrl)
-      _ = println(res)
     } yield res.isEmpty shouldBe true).unsafeRunSync
   }
 

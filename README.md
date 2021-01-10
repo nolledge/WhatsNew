@@ -9,7 +9,9 @@ This project contains two modules and needs a Redis instance:
 2. A Job to stream every SearchJob, perfrom the search and notify the user about new items
 
 
-## Commands
+# Commands
+
+## Searches
 
 Send your bot commands to manage searches
 
@@ -35,6 +37,30 @@ Delete an item by its index. Items start from index 0
 `/all`
 
 Get all items in order. 
+
+## Notes
+
+#### Add
+
+`/nadd <templateName> <text>`
+
+get all note names
+
+#### Get
+
+`/nall`
+
+get all note names
+
+`/n <templateName>`
+
+get note text by key
+
+#### Remove
+
+`/nrm <templateName>`
+
+remove note by key
 
 
 
