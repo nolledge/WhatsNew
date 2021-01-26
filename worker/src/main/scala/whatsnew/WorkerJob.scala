@@ -29,7 +29,7 @@ class WorkerJob[F[_]: Concurrent: Timer: Logger](
     for {
       _ <- Logger[F].debug(s"Receiving items for searchJob $s")
       prev <- itemIds.get(s.chatId, s.url).map(_.toList)
-      current <- itemExtractor.getAllItems(s.url)
+      current <- itemExtractor.getAllItems(s.url).map(_.distinct)
       _ <- Logger[F].debug(
         s"${prev.length} previous items and ${current.length} current items"
       )

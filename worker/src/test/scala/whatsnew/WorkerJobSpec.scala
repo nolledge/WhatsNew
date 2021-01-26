@@ -116,6 +116,15 @@ class WorkerJobSpec extends AnyFlatSpec with Matchers with BeforeAndAfter {
       items <- refs._3.get
     } yield items shouldBe List.empty).unsafeRunSync()
   }
+  "The WorkerJob" should "not notify the user about the same item if exracted twice" in new TestSetup(
+    oldItemIds = List(item.id),
+    newItems = List(item, item)
+  ) {
+    (for {
+      refs <- testProgram
+      items <- refs._3.get
+    } yield items shouldBe List.empty).unsafeRunSync()
+  }
 
   "The WorkerJob" should "increment runs for the job" in new TestSetup(
     oldItemIds = List.empty,
