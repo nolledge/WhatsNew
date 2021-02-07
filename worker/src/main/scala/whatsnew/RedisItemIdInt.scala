@@ -22,7 +22,12 @@ class RedisItemIdInt[F[_]: Concurrent: ContextShift](redisUrl: String)
     Redis[F].utf8(redisUrl).use { cmd =>
       for {
         _ <- cmd.del(s"items:$chatId:$searchUrl")
-        _ <- cmd.sAdd(s"items:$chatId:$searchUrl", ids.toSeq: _*)
+        _ <-
+          if (ids.isEmpty) {
+            ().pure[F]
+          } else {
+            cmd.sAdd(s"items:$chatId:$searchUrl", ids.toSeq: _*)
+          }
       } yield ids
     }
 

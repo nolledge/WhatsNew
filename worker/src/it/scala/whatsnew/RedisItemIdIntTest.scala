@@ -38,6 +38,11 @@ class RedisItemIdIntTest
 
   val redisItemIds = new RedisItemIdInt[IO](redisUrl)
 
+  "The RedisItemIdInt" should "set empty" in {
+    (for {
+      res <- redisItemIds.set(chatId, searchUrl, Set.empty)
+    } yield res.isEmpty shouldBe true).unsafeRunSync
+  }
   "The RedisItemIdInt" should "should set/get item ids" in {
     (for {
       _ <- redisItemIds.set(chatId, searchUrl, items)
