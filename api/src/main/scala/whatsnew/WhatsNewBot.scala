@@ -7,7 +7,6 @@ import com.bot4s.telegram.cats.Polling
 import com.softwaremill.sttp.asynchttpclient.cats.AsyncHttpClientCatsBackend
 import CoreEntities._
 import Entities._
-import scala.util.Try
 
 import eu.timepit.refined.auto._
 
@@ -55,21 +54,14 @@ class WhatsNewBot[F[_]: Async: ContextShift](
   onCommand("/rm") { implicit msg =>
     withArgs {
       case Seq(fArg) =>
-        Try(fArg.toInt)
+        validateUrl(fArg)
           .fold(
-            _ => reply(s"parameter is not a valid number").void,
-            i =>
-              for {
-                items <- searches.getByChat(msg.source)
-                delUrl = items.get(i.toLong).map(_.url)
-                _ <- delUrl.fold(reply("index does not exist"))(url =>
-                  searches
-                    .deleteUrl(msg.source, url)
-                    .flatMap(_ => reply(s"deleted search job $i"))
-                )
-              } yield ()
+            _ => reply(s"parameter is not a valid url").void,
+            url =>
+              searches
+                .deleteUrl(msg.source, url)
+                .flatMap(_ => reply(s"deleted search job $url").void)
           )
-
       case _ =>
         reply("Invalid argument. Usage: /add http://host/searchquery=xyz").void
     }

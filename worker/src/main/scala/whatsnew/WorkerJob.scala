@@ -37,7 +37,7 @@ class WorkerJob[F[_]: Concurrent: Timer: Logger](
       diffIds =
         if (prev.isEmpty) { List.empty }
         else { currentIds.diff(prev) }
-      _ <- itemIds.set(s.chatId, s.url, currentIds.toSet)
+      _ <- itemIds.add(s.chatId, s.url, currentIds.toSet)
       _ <- searchJobs.update(s.copy(runs = s.runs + 1))
     } yield current.filter(c => diffIds.contains(c.id))
 

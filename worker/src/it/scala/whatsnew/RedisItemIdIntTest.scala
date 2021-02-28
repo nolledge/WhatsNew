@@ -3,12 +3,9 @@ package whatsnew
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 import cats.effect._
-import CoreEntities._
 import eu.timepit.refined.auto._
 
 import scala.concurrent.ExecutionContext
-import org.scalatest.BeforeAndAfter
-import org.scalactic.source.Position
 import dev.profunktor.redis4cats.Redis
 import dev.profunktor.redis4cats.effect.Log.Stdout._
 import org.scalatest.BeforeAndAfterEach
@@ -38,23 +35,23 @@ class RedisItemIdIntTest
 
   val redisItemIds = new RedisItemIdInt[IO](redisUrl)
 
-  "The RedisItemIdInt" should "set empty" in {
+  "The RedisItemIdInt" should "add empty" in {
     (for {
-      res <- redisItemIds.set(chatId, searchUrl, Set.empty)
+      res <- redisItemIds.add(chatId, searchUrl, Set.empty)
     } yield res.isEmpty shouldBe true).unsafeRunSync
   }
-  "The RedisItemIdInt" should "should set/get item ids" in {
+  "The RedisItemIdInt" should "should add/get item ids" in {
     (for {
-      _ <- redisItemIds.set(chatId, searchUrl, items)
+      _ <- redisItemIds.add(chatId, searchUrl, items)
       res <- redisItemIds.get(chatId, searchUrl)
     } yield res shouldBe items).unsafeRunSync
   }
-  "The RedisItemIdInt" should "should overwrite when set" in {
+  "The RedisItemIdInt" should "should append when added" in {
     (for {
-      _ <- redisItemIds.set(chatId, searchUrl, moreItems)
-      _ <- redisItemIds.set(chatId, searchUrl, items)
+      _ <- redisItemIds.add(chatId, searchUrl, moreItems)
+      _ <- redisItemIds.add(chatId, searchUrl, items)
       res <- redisItemIds.get(chatId, searchUrl)
-    } yield res shouldBe items).unsafeRunSync
+    } yield res shouldBe items ++ moreItems).unsafeRunSync
   }
   "The RedisItemIdInt" should "return empty when nothing set" in {
     (for {

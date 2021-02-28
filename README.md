@@ -3,7 +3,7 @@
 A hopelessly overengineered poor mans TelegramBot: Add searches for ebay Kleinanzeigen.
 Get notifications if a new item appears for your search.
 
-This project contains two modules and needs a Redis instance:
+This project contains two modules and requires a Redis instance:
 
 1. Simple CRUD API to create SearchJobs via Telegram
 2. A Job to stream every SearchJob, perfrom the search and notify the user about new items
@@ -28,9 +28,9 @@ Add a search to watch
 
 Delete all searches
 
-`/rm <index>`
+`/rm <url>`
 
-Delete an item by its index. Items start from index 0
+Delete an item by its url.
 
 #### Get
 
