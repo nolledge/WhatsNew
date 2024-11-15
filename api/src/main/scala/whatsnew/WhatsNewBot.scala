@@ -14,7 +14,6 @@ import whatsnew.Entities._
 class WhatsNewBot[F[_]: Async](
     token: String,
     searches: SearchesAlg[F],
-    notes: NotesAlg[F],
     backend: SttpBackend[F, Any]
 ) extends TelegramBot[F](token, backend)
     with Polling[F]
@@ -66,51 +65,6 @@ class WhatsNewBot[F[_]: Async](
           )
       case _ =>
         reply("Invalid argument. Usage: /add http://host/searchquery=xyz").void
-    }
-  }
-
-  onCommand("/nadd") { implicit msg =>
-    msg.text.map(_.split(" ").toList) match {
-      case Some(_ :: name :: tail) =>
-        notes
-          .add(Note(msg.source, name, tail.mkString(" ")))
-          .flatMap(_ => reply(s"added note $name").void)
-      case _ =>
-        reply("Invalid argument. Usage: /nadd <name> <message>").void
-
-    }
-  }
-
-  onCommand("/nall") { implicit msg =>
-    notes
-      .allNames(msg.source)
-      .flatMap { m =>
-        val noteNames = m.mkString(",")
-        reply(s"found note tempates: $noteNames").void
-      }
-  }
-
-  onCommand("/n") { implicit msg =>
-    withArgs {
-      case Seq(name) =>
-        notes
-          .getByName(msg.source, name)
-          .flatMap(
-            _.fold(().pure[F])(t => reply(t.text).void)
-          )
-      case _ =>
-        reply("Invalid argument. Usage: /n <templateName>").void
-    }
-  }
-
-  onCommand("/nrm") { implicit msg =>
-    withArgs {
-      case Seq(name) =>
-        notes
-          .deleteByName(msg.source, name)
-          .flatMap(_ => reply("deleted note").void)
-      case _ =>
-        reply("Invalid argument. Usage: /n <templateName>").void
     }
   }
 }

@@ -19,7 +19,11 @@ import org.typelevel.log4cats.slf4j.Slf4jLogger
 import whatsnew.CoreEntities.SearchJob
 import whatsnew.Entities._
 
-class WorkerJobSpec extends AsyncFlatSpec with AsyncIOSpec with Matchers with BeforeAndAfter {
+class WorkerJobSpec
+    extends AsyncFlatSpec
+    with AsyncIOSpec
+    with Matchers
+    with BeforeAndAfter {
 
   implicit def unsafeLogger[F[_]: Sync] = Slf4jLogger.getLogger[F]
   val item = Item("id", "https://itemurl", "title", "desc", None)
@@ -46,7 +50,11 @@ class WorkerJobSpec extends AsyncFlatSpec with AsyncIOSpec with Matchers with Be
       }
       itemIdsAlg = new ItemIdAlg[IO] {
 
-        override def add(chatId: Long, searchUrl: ItemUrl, ids: Set[String]): IO[Set[String]] =
+        override def add(
+            chatId: Long,
+            searchUrl: ItemUrl,
+            ids: Set[String]
+        ): IO[Set[String]] =
           updatedItemIds
             .update(u => u ++ ids.toList)
             .map(_ => ids)
@@ -80,38 +88,42 @@ class WorkerJobSpec extends AsyncFlatSpec with AsyncIOSpec with Matchers with Be
   }
 
   "The WorkerJob" should "should not return items in the first run" in {
-    val testSetup = new TestSetup( oldItemIds = List.empty, newItems = List(item)) 
+    val testSetup =
+      new TestSetup(oldItemIds = List.empty, newItems = List(item))
     for {
       refs <- testSetup.testProgram
       items <- refs._3.get
     } yield items.isEmpty shouldBe true
   }
 
-  "The WorkerJob" should "set new ids after a run" in { 
-    val testSetup = new TestSetup( oldItemIds = List.empty, newItems = List(item)) 
-   for {
+  "The WorkerJob" should "set new ids after a run" in {
+    val testSetup =
+      new TestSetup(oldItemIds = List.empty, newItems = List(item))
+    for {
       refs <- testSetup.testProgram
       ids <- refs._2.get
     } yield ids.head shouldBe item.id
   }
-  
 
-  "The WorkerJob" should "notify the user about a new item" in { 
-    val testSetup = new TestSetup( oldItemIds = List("prev"), newItems = List(item)) 
+  "The WorkerJob" should "notify the user about a new item" in {
+    val testSetup =
+      new TestSetup(oldItemIds = List("prev"), newItems = List(item))
     for {
       refs <- testSetup.testProgram
       items <- refs._3.get
     } yield items shouldBe List(item)
   }
   "The WorkerJob" should "not notify the user about the same item" in {
-    val testSetup = new TestSetup( oldItemIds = List(item.id), newItems = List(item))
+    val testSetup =
+      new TestSetup(oldItemIds = List(item.id), newItems = List(item))
     for {
       refs <- testSetup.testProgram
       items <- refs._3.get
     } yield items shouldBe List.empty
   }
   "The WorkerJob" should "not notify the user about the same item if exracted twice" in {
-    val testSetup = new TestSetup( oldItemIds = List(item.id), newItems = List(item, item))
+    val testSetup =
+      new TestSetup(oldItemIds = List(item.id), newItems = List(item, item))
     for {
       refs <- testSetup.testProgram
       items <- refs._3.get
@@ -119,11 +131,12 @@ class WorkerJobSpec extends AsyncFlatSpec with AsyncIOSpec with Matchers with Be
   }
 
   "The WorkerJob" should "increment runs for the job" in {
-    val testSetup = new TestSetup( oldItemIds = List.empty, newItems = List(item)) 
+    val testSetup =
+      new TestSetup(oldItemIds = List.empty, newItems = List(item))
     for {
       refs <- testSetup.testProgram
       jobs <- refs._1.get
     } yield jobs.head.runs shouldBe 1
   }
-  
+
 }

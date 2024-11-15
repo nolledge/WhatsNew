@@ -1,8 +1,8 @@
 import Dependencies._
 
-ThisBuild / scalaVersion     := "2.13.15"
-ThisBuild / version          := "0.4.1"
-ThisBuild / organization     := "com.example"
+ThisBuild / scalaVersion := "2.13.15"
+ThisBuild / version := "0.4.1"
+ThisBuild / organization := "com.example"
 ThisBuild / organizationName := "example"
 
 lazy val commonSettings = Seq(
@@ -28,7 +28,7 @@ lazy val commonSettings = Seq(
     "-Xlint:nullary-unit",
     "-Xlint:option-implicit",
     "-Xlint:package-object-classes",
-    "-Xlint:poly-implicit-overload", 
+    "-Xlint:poly-implicit-overload",
     "-Xlint:private-shadow",
     "-Xlint:stars-align",
     "-Xlint:type-parameter-shadow",
@@ -36,8 +36,8 @@ lazy val commonSettings = Seq(
     "-Ywarn-extra-implicit",
     "-Ywarn-numeric-widen",
     "-Ywarn-unused:implicits",
-    "-Ywarn-unused:imports", 
-    "-Ywarn-unused:locals", 
+    "-Ywarn-unused:imports",
+    "-Ywarn-unused:locals",
     "-Ywarn-unused:params",
     "-Ywarn-unused:patvars",
     "-Ywarn-unused:privates",
@@ -48,7 +48,7 @@ lazy val commonSettings = Seq(
 lazy val debianSettings = Seq(
   version in Debian := "1.0.0",
   packageSummary := "Whats New API and worker",
-  packageDescription := "Telegram controlled webcrawler",
+  packageDescription := "Telegram controlled webcrawler"
 )
 
 def baseProject(name: String): Project =
@@ -64,7 +64,6 @@ lazy val core = baseProject("core")
   .settings(
     libraryDependencies ++= Dependencies.coreDependencies
   )
-
 
 lazy val api = baseProject("api")
   .dependsOn(core % "compile->compile;test->test;it->it")

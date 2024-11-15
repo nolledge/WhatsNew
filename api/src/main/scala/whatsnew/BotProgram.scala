@@ -14,9 +14,8 @@ object BotProgram extends IOApp {
       config <- ConfigSource.default.loadF[IO, Config]
       redisSearches = new RedisSearchesInt[IO](config.redis.url)
         with SearchesAlg[IO]
-      redisNotes = new RedisNotesInt[IO](config.redis.url)
-        backend <- AsyncHttpClientCatsBackend[IO]()
-      bot = new WhatsNewBot[IO](config.bot.token, redisSearches, redisNotes, backend)
+      backend <- AsyncHttpClientCatsBackend[IO]()
+      bot = new WhatsNewBot[IO](config.bot.token, redisSearches, backend)
       _ <- bot.run()
     } yield ExitCode.Success
 

@@ -29,7 +29,6 @@ class RedisItemIdIntTest
       .use { cmd =>
         cmd.del(s"items:$chatId:$searchUrl")
       }
-      
 
   val redisItemIds = new RedisItemIdInt[IO](redisUrl)
 

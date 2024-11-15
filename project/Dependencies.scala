@@ -21,7 +21,7 @@ object Dependencies {
     "org.scalatest" %% "scalatest" % Version.scalaTest % "test,it"
 
   lazy val catsEffectTesting =
-  "org.typelevel" %% "cats-effect-testing-scalatest" % Version.catsEffectTesting % "test,it"
+    "org.typelevel" %% "cats-effect-testing-scalatest" % Version.catsEffectTesting % "test,it"
 
   lazy val refined = Seq(
     "eu.timepit" %% "refined" % Version.refined,
@@ -52,7 +52,6 @@ object Dependencies {
   lazy val redis4CatsStreams =
     "dev.profunktor" %% "redis4cats-streams" % Version.redis4Cats
 
-
   lazy val logback = "ch.qos.logback" % "logback-classic" % Version.logback
 
   lazy val pureCfg = Seq(
@@ -73,7 +72,7 @@ object Dependencies {
   lazy val apiDependencies =
     cats ++ pureCfg ++ Seq(
       bot4s,
-      sttpBackendCats,
+      sttpBackendCats
     )
 
   lazy val workerDependencies =

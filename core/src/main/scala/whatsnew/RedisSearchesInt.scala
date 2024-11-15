@@ -14,8 +14,8 @@ import dev.profunktor.redis4cats.effect.Log.Stdout._
 import eu.timepit.refined.auto._
 import whatsnew.CoreEntities._
 
-class RedisSearchesInt[F[_]: Async](redisUrl: String)(
-    implicit val me: MonadThrow[F]
+class RedisSearchesInt[F[_]: Async](redisUrl: String)(implicit
+    val me: MonadThrow[F]
 ) {
 
   /**
