@@ -1,6 +1,6 @@
 package whatsnew
 
-import Entities._
+import whatsnew.Entities._
 
 trait NotesAlg[F[_]] {
   def add(note: Note): F[Unit]

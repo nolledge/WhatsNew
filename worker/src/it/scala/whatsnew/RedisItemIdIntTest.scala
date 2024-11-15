@@ -1,17 +1,18 @@
 package whatsnew
 
-import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.flatspec.AsyncFlatSpec
 import org.scalatest.matchers.should.Matchers
 import cats.effect._
 import eu.timepit.refined.auto._
 
-import scala.concurrent.ExecutionContext
 import dev.profunktor.redis4cats.Redis
 import dev.profunktor.redis4cats.effect.Log.Stdout._
 import org.scalatest.BeforeAndAfterEach
+import cats.effect.testing.scalatest.AsyncIOSpec
 
 class RedisItemIdIntTest
-    extends AnyFlatSpec
+    extends AsyncFlatSpec
+    with AsyncIOSpec
     with Matchers
     with BeforeAndAfterEach {
 
@@ -22,41 +23,38 @@ class RedisItemIdIntTest
   val items = Set("1", "2")
   val moreItems = Set("3", "4")
 
-  implicit val cs: ContextShift[IO] = IO.contextShift(ExecutionContext.global)
-  implicit val timer: Timer[IO] = IO.timer(ExecutionContext.global)
-
   override protected def beforeEach(): Unit =
     Redis[IO]
       .utf8(redisUrl)
       .use { cmd =>
         cmd.del(s"items:$chatId:$searchUrl")
       }
-      .unsafeRunSync()
+      
 
   val redisItemIds = new RedisItemIdInt[IO](redisUrl)
 
   "The RedisItemIdInt" should "add empty" in {
     (for {
       res <- redisItemIds.add(chatId, searchUrl, Set.empty)
-    } yield res.isEmpty shouldBe true).unsafeRunSync
+    } yield res.isEmpty shouldBe true)
   }
   "The RedisItemIdInt" should "should add/get item ids" in {
     (for {
       _ <- redisItemIds.add(chatId, searchUrl, items)
       res <- redisItemIds.get(chatId, searchUrl)
-    } yield res shouldBe items).unsafeRunSync
+    } yield res shouldBe items)
   }
   "The RedisItemIdInt" should "should append when added" in {
     (for {
       _ <- redisItemIds.add(chatId, searchUrl, moreItems)
       _ <- redisItemIds.add(chatId, searchUrl, items)
       res <- redisItemIds.get(chatId, searchUrl)
-    } yield res shouldBe items ++ moreItems).unsafeRunSync
+    } yield res shouldBe items ++ moreItems)
   }
   "The RedisItemIdInt" should "return empty when nothing set" in {
     (for {
       res <- redisItemIds.get(chatId, searchUrl)
-    } yield res.isEmpty shouldBe true).unsafeRunSync
+    } yield res.isEmpty shouldBe true)
   }
 
 }

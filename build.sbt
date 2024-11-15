@@ -1,12 +1,12 @@
 import Dependencies._
 
-ThisBuild / scalaVersion     := "2.12.12"
-ThisBuild / version          := "0.3.0-SNAPSHOT"
+ThisBuild / scalaVersion     := "2.13.15"
+ThisBuild / version          := "0.4.1"
 ThisBuild / organization     := "com.example"
 ThisBuild / organizationName := "example"
 
 lazy val commonSettings = Seq(
-  scalaVersion := "2.12.12",
+  scalaVersion := "2.13.15",
   Global / onChangedBuildSource := ReloadOnSourceChanges,
   scalacOptions ++= Seq(
     "-deprecation",
@@ -20,13 +20,11 @@ lazy val commonSettings = Seq(
     "-language:implicitConversions",
     "-unchecked",
     "-Xfuture",
-    "-Xlint:by-name-right-associative",
     "-Xlint:constant",
     "-Xlint:delayedinit-select",
     "-Xlint:inaccessible",
     "-Xlint:infer-any",
     "-Xlint:missing-interpolator",
-    "-Xlint:nullary-override",
     "-Xlint:nullary-unit",
     "-Xlint:option-implicit",
     "-Xlint:package-object-classes",
@@ -34,14 +32,8 @@ lazy val commonSettings = Seq(
     "-Xlint:private-shadow",
     "-Xlint:stars-align",
     "-Xlint:type-parameter-shadow",
-    "-Xlint:unsound-match",
-    "-Ypartial-unification",
     "-Ywarn-dead-code",
     "-Ywarn-extra-implicit",
-    "-Ywarn-inaccessible", 
-    "-Ywarn-infer-any", 
-    "-Ywarn-nullary-override",
-    "-Ywarn-nullary-unit", 
     "-Ywarn-numeric-widen",
     "-Ywarn-unused:implicits",
     "-Ywarn-unused:imports", 
@@ -78,7 +70,6 @@ lazy val api = baseProject("api")
   .dependsOn(core % "compile->compile;test->test;it->it")
   .settings(
     libraryDependencies ++= Dependencies.apiDependencies
-    // Compile / mainClass := Some("com.dreamlines.dragonfly.api.Starter")
   )
   .enablePlugins(DebianPlugin)
   .enablePlugins(JavaAppPackaging)
@@ -87,7 +78,6 @@ lazy val worker = baseProject("worker")
   .dependsOn(core % "compile->compile;test->test;it->it")
   .settings(
     libraryDependencies ++= Dependencies.workerDependencies
-    // Compile / mainClass := Some("com.dreamlines.dragonfly.api.Starter")
   )
   .enablePlugins(DebianPlugin)
   .enablePlugins(JavaAppPackaging)

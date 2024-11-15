@@ -1,6 +1,6 @@
 package whatsnew
 
-import CoreEntities._
+import whatsnew.CoreEntities._
 
 trait SearchesAlg[F[_]] {
   def getAll: F[List[SearchJob]]

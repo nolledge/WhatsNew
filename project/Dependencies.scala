@@ -3,22 +3,25 @@ import sbt._
 object Dependencies {
 
   object Version {
-    lazy val refined = "0.9.19"
+    lazy val refined = "0.11.2"
     lazy val scalaTest = "3.2.2"
-    lazy val bot4s = "4.4.0-RC2"
-    lazy val sttp = "1.7.2"
-    lazy val cats = "2.3.0"
-    lazy val newType = "0.4.4"
-    lazy val redis4Cats = "0.10.3"
-    lazy val log4Cats = "1.1.1"
-    lazy val logback = "1.2.1"
-    lazy val pureCfg = "0.14.0"
-    lazy val scalaScraper = "2.2.0"
-    lazy val fs2 = "2.4.6"
+    lazy val bot4s = "5.8.3"
+    lazy val sttp = "3.10.1"
+    lazy val catsEffect = "3.5.4"
+    lazy val redis4Cats = "1.7.1"
+    lazy val log4Cats = "2.7.0"
+    lazy val logback = "1.5.12"
+    lazy val pureCfg = "0.17.7"
+    lazy val scalaScraper = "2.2.1"
+    lazy val fs2 = "3.11.0"
+    lazy val catsEffectTesting = "1.5.0"
   }
 
   lazy val scalaTest =
     "org.scalatest" %% "scalatest" % Version.scalaTest % "test,it"
+
+  lazy val catsEffectTesting =
+  "org.typelevel" %% "cats-effect-testing-scalatest" % Version.catsEffectTesting % "test,it"
 
   lazy val refined = Seq(
     "eu.timepit" %% "refined" % Version.refined,
@@ -28,20 +31,19 @@ object Dependencies {
   lazy val bot4s = "com.bot4s" %% "telegram-core" % Version.bot4s
 
   lazy val sttpCore =
-    "com.softwaremill.sttp" %% "core" % Version.sttp
+    "com.softwaremill.sttp.client3" %% "core" % Version.sttp
   lazy val sttpBackendCats =
-    "com.softwaremill.sttp" %% "async-http-client-backend-cats" % Version.sttp
+    "com.softwaremill.sttp.client3" %% "async-http-client-backend-cats" % Version.sttp
 
   lazy val scalaScraper =
     "net.ruippeixotog" %% "scala-scraper" % Version.scalaScraper
 
   lazy val cats = Seq(
-    "org.typelevel" %% "cats-effect" % Version.cats,
-    "org.typelevel" %% "cats-core" % Version.cats
+    "org.typelevel" %% "cats-effect" % Version.catsEffect
   )
   lazy val log4Cats = Seq(
-    "io.chrisdavenport" %% "log4cats-core" % Version.log4Cats,
-    "io.chrisdavenport" %% "log4cats-slf4j" % Version.log4Cats
+    "org.typelevel" %% "log4cats-core" % Version.log4Cats,
+    "org.typelevel" %% "log4cats-slf4j" % Version.log4Cats
   )
 
   lazy val redis4Cats =
@@ -50,7 +52,6 @@ object Dependencies {
   lazy val redis4CatsStreams =
     "dev.profunktor" %% "redis4cats-streams" % Version.redis4Cats
 
-  lazy val newType = "io.estatico" %% "newtype" % Version.newType
 
   lazy val logback = "ch.qos.logback" % "logback-classic" % Version.logback
 
@@ -63,17 +64,16 @@ object Dependencies {
 
   lazy val coreDependencies =
     refined ++ cats ++ log4Cats ++ Seq(
-      newType,
       redis4Cats,
       logback,
-      scalaTest
+      scalaTest,
+      catsEffectTesting
     )
 
   lazy val apiDependencies =
     cats ++ pureCfg ++ Seq(
       bot4s,
       sttpBackendCats,
-      newType
     )
 
   lazy val workerDependencies =
@@ -81,7 +81,6 @@ object Dependencies {
       bot4s,
       sttpCore,
       sttpBackendCats,
-      newType,
       scalaScraper,
       fs2
     )

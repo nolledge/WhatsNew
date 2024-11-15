@@ -1,6 +1,6 @@
 package whatsnew
 
-import Entities._
+import whatsnew.Entities._
 
 trait ItemIdAlg[F[_]] {
 

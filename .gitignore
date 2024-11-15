@@ -4,4 +4,5 @@
 .bsp/
 .vscode/
 target/
+project/metals.sbt
 worker_job.yaml

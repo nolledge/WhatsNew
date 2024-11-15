@@ -1,11 +1,12 @@
 package whatsnew
 
-import eu.timepit.refined.numeric._
-import eu.timepit.refined.api.Refined
-import eu.timepit.refined.string._
 import java.time.ZonedDateTime
+
 import eu.timepit.refined._
+import eu.timepit.refined.api.Refined
+import eu.timepit.refined.numeric._
 import eu.timepit.refined.string.Url._
+import eu.timepit.refined.string._
 
 object CoreEntities {
 

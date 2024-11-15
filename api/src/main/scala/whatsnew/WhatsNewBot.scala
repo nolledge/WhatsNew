@@ -1,20 +1,22 @@
 package whatsnew
 
-import cats.effect.{Async, ContextShift}
+import cats.effect.Async
 import cats.implicits._
-import com.bot4s.telegram.cats.TelegramBot
+
 import com.bot4s.telegram.cats.Polling
-import com.softwaremill.sttp.asynchttpclient.cats.AsyncHttpClientCatsBackend
-import CoreEntities._
-import Entities._
-
+import com.bot4s.telegram.cats.TelegramBot
 import eu.timepit.refined.auto._
+import sttp.client3.SttpBackend
+import sttp.client3.asynchttpclient.cats.AsyncHttpClientCatsBackend
+import whatsnew.CoreEntities._
+import whatsnew.Entities._
 
-class WhatsNewBot[F[_]: Async: ContextShift](
+class WhatsNewBot[F[_]: Async](
     token: String,
     searches: SearchesAlg[F],
-    notes: NotesAlg[F]
-) extends TelegramBot(token, AsyncHttpClientCatsBackend())
+    notes: NotesAlg[F],
+    backend: SttpBackend[F, Any]
+) extends TelegramBot[F](token, backend)
     with Polling[F]
     with com.bot4s.telegram.api.declarative.Commands[F] {
 

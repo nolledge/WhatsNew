@@ -1,6 +1,6 @@
 package whatsnew
 
-import Entities._
+import whatsnew.Entities._
 
 trait ItemExtractor[F[_]] {
   def getAllItems(url: SearchUrl): F[List[Item]]

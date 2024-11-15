@@ -1,9 +1,11 @@
 package whatsnew
 
 import cats.effect._
+
 import pureconfig._
 import pureconfig.generic.auto._
 import pureconfig.module.catseffect.syntax._
+import sttp.client3.asynchttpclient.cats.AsyncHttpClientCatsBackend
 
 object BotProgram extends IOApp {
 
@@ -13,7 +15,8 @@ object BotProgram extends IOApp {
       redisSearches = new RedisSearchesInt[IO](config.redis.url)
         with SearchesAlg[IO]
       redisNotes = new RedisNotesInt[IO](config.redis.url)
-      bot = new WhatsNewBot[IO](config.bot.token, redisSearches, redisNotes)
+        backend <- AsyncHttpClientCatsBackend[IO]()
+      bot = new WhatsNewBot[IO](config.bot.token, redisSearches, redisNotes, backend)
       _ <- bot.run()
     } yield ExitCode.Success
 

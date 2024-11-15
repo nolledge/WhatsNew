@@ -1,13 +1,15 @@
 package whatsnew
 
-import whatsnew.CoreEntities.SearchJob
-import cats.implicits._
-import cats.effect._
-import Entities._
 import scala.concurrent.duration._
-import io.chrisdavenport.log4cats.Logger
 
-class WorkerJob[F[_]: Concurrent: Timer: Logger](
+import cats.effect._
+import cats.implicits._
+
+import org.typelevel.log4cats.Logger
+import whatsnew.CoreEntities.SearchJob
+import whatsnew.Entities._
+
+class WorkerJob[F[_]: Temporal: Logger](
     searchJobs: SearchesAlg[F],
     itemIds: ItemIdAlg[F],
     itemExtractor: ItemExtractor[F],
@@ -19,9 +21,9 @@ class WorkerJob[F[_]: Concurrent: Timer: Logger](
     Logger[F].info("Starting worker job") *>
       fs2.Stream
         .evals(searchJobs.getAll)
+        .delayBy(requestInterval)
         .evalMap(s => searchAndDiff(s).map(diff => (s.chatId, diff)))
         .evalMap((notifyUser _).tupled)
-        .delayBy(requestInterval)
         .compile
         .drain
 

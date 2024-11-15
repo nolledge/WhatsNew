@@ -2,14 +2,13 @@ package whatsnew
 
 import cats.effect._
 import cats.implicits._
+
 import dev.profunktor.redis4cats._
 import dev.profunktor.redis4cats.effect.Log.Stdout._
 import eu.timepit.refined.auto._
-import Entities._
+import whatsnew.Entities._
 
-class RedisNotesInt[F[_]: Concurrent: ContextShift](redisUrl: String)(implicit
-    val me: MonadThrow[F]
-) extends NotesAlg[F] {
+class RedisNotesInt[F[_]: Async](redisUrl: String) extends NotesAlg[F] {
 
   def add(n: Note): F[Unit] =
     Redis[F].utf8(redisUrl).use { implicit cmd =>

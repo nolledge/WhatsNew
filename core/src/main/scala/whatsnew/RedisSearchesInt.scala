@@ -1,16 +1,20 @@
 package whatsnew
 
-import CoreEntities._
-import cats.effect._
-import cats.implicits._
-import dev.profunktor.redis4cats._
-import dev.profunktor.redis4cats.effect.Log.Stdout._
 import java.time.ZonedDateTime
-import java.time.ZonedDateTime
-import eu.timepit.refined.auto._
+
 import scala.util.Try
 
-class RedisSearchesInt[F[_]: Concurrent: ContextShift](redisUrl: String)(
+import cats.MonadThrow
+import cats.effect._
+import cats.implicits._
+
+import dev.profunktor.redis4cats.Redis
+import dev.profunktor.redis4cats._
+import dev.profunktor.redis4cats.effect.Log.Stdout._
+import eu.timepit.refined.auto._
+import whatsnew.CoreEntities._
+
+class RedisSearchesInt[F[_]: Async](redisUrl: String)(
     implicit val me: MonadThrow[F]
 ) {
 
@@ -137,7 +141,7 @@ class RedisSearchesInt[F[_]: Concurrent: ContextShift](redisUrl: String)(
         _ <- cmd.sRem(s"searches:$chatId", u.value)
         searches <- cmd.sMembers(s"searches:$chatId").map(_.size)
         _ <-
-          if (searches == 0) {
+          if (searches === 0) {
             cmd.sRem("searches", u.value)
           } else { ().pure[F] }
       } yield ()

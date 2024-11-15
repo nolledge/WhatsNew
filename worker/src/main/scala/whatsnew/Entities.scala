@@ -1,10 +1,10 @@
 package whatsnew
 
-import eu.timepit.refined.api.Refined
-import eu.timepit.refined.string._
-import eu.timepit.refined._
-import eu.timepit.refined.string.Url._
 import _root_.cats.Show
+import eu.timepit.refined._
+import eu.timepit.refined.api.Refined
+import eu.timepit.refined.string.Url._
+import eu.timepit.refined.string._
 
 object Entities {
 

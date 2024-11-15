@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: whats-new-api-deployment
+  name: whats-new-api-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: whats-new-api-deployment
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: whats-new-api-deployment
+    spec:
+      containers:
+      - image: core.harbor.storozhev.net/nolledge/whats-new-api:0.3.0-SNAPSHOT
+        name: whats-new-api
+        resources: {}
+        env:
+          - name: BOT_TOKEN
+            value: 833594755:AAGVgjkTntAZMytmZvKBnSFmo31Jx3GgpLM
+          - name: REDIS_URL
+            value: redis://redis
+status: {}

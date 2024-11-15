@@ -9,14 +9,16 @@ import eu.timepit.refined.auto._
 import scala.concurrent.ExecutionContext
 import org.scalatest.BeforeAndAfter
 import org.scalactic.source.Position
+import cats.effect.unsafe.IORuntime
 
 class RedisSearchesIntTest
     extends AnyFlatSpec
     with Matchers
     with BeforeAndAfter {
 
-  implicit val cs: ContextShift[IO] = IO.contextShift(ExecutionContext.global)
-  implicit val timer: Timer[IO] = IO.timer(ExecutionContext.global)
+  implicit val temporal: Temporal[IO] = Temporal[IO]
+  implicit val async: Async[IO] = Async[IO]
+  implicit val ioRuntime: IORuntime = IORuntime.global
 
   val redisSearches = new RedisSearchesInt[IO]("redis://localhost")
   val searchUrl: SearchUrl = "https://www.ebay-kleinanzeigen.de/s-thinkpad/k0"

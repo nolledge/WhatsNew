@@ -1,12 +1,13 @@
 package whatsnew
 
-import dev.profunktor.redis4cats.Redis
 import cats.effect._
 import cats.implicits._
+
+import dev.profunktor.redis4cats.Redis
 import dev.profunktor.redis4cats._
 import dev.profunktor.redis4cats.effect.Log.Stdout._
 
-class RedisItemIdInt[F[_]: Concurrent: ContextShift](redisUrl: String)
+class RedisItemIdInt[F[_]: Async](redisUrl: String)
     extends ItemIdAlg[F] {
 
   override def get(chatId: Long, searchUrl: Entities.ItemUrl): F[Set[String]] =
